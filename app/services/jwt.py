@@ -35,9 +35,6 @@ class JWTService:
         except AttributeError as e:
             print(e)
             return None
-        except Exception as e:
-            print(e)
-            return None
 
     def refresh(self, refresh_token: str) -> TokensResponse | None:
         if not refresh_token:
@@ -52,4 +49,3 @@ class JWTService:
         refresh_token = self.create_token(token_data['sub'], refresh=True)
 
         return TokensResponse(access_token=access_token, refresh_token=refresh_token)
-

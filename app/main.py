@@ -3,8 +3,6 @@ import os
 import click
 import uvicorn
 
-from core.config import config
-
 
 @click.command()
 @click.option(
@@ -18,14 +16,17 @@ from core.config import config
     is_flag=True,
     default=False,
 )
-def main(env: str, debug: bool):
+def main(env: str = "dev", debug: bool = False):
     os.environ["ENV"] = env
     os.environ["DEBUG"] = str(debug)
+
+    from core.config import config
+
     uvicorn.run(
         app="app:app",
         host=config.APP_HOST,
         port=config.APP_PORT,
-        reload=True if env != "prod" else False,
+        reload=(env != "prod"),
     )
 
 

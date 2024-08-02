@@ -1,4 +1,5 @@
 from typing import Annotated
+import datetime as dt
 
 from fastapi import Depends
 
@@ -30,7 +31,7 @@ async def get_current_user(
     if not user:
         raise AuthError(detail='Invalid authorization token.')
 
-    if user.password_updated_at > timestamp_to_utc(token_data['iat']).replace(tzinfo=None):
+    if user.password_updated_at.replace(tzinfo=dt.timezone.utc) > timestamp_to_utc(token_data['iat']):
         raise AuthError(detail='Invalid authorization token.')
 
     return user
