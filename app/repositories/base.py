@@ -60,10 +60,12 @@ class SQLAlchemyRepository(AbstractRepository, ABC):
         stmt = select(self.model)
 
         for key, value in filters.items():
+
             if isinstance(value, list):
                 stmt_filter = or_(*[getattr(self.model, key) == v for v in value])
                 total_count_stmt = total_count_stmt.where(stmt_filter)
                 stmt = stmt.where(stmt_filter)
+
             elif value is not None:
                 total_count_stmt = total_count_stmt.filter_by(**{key: value})
                 stmt = stmt.filter_by(**{key: value})
@@ -72,10 +74,13 @@ class SQLAlchemyRepository(AbstractRepository, ABC):
 
         if limit is not None:
             stmt = stmt.limit(limit)
+
         if offset is not None:
             stmt = stmt.offset(offset)
+
         if order_by is not None:
             stmt = stmt.order_by(desc(order_by)) if reverse else stmt.order_by(order_by)
+
         result = await self.session.execute(stmt)
         result = result.scalars().all()
 
