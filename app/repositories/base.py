@@ -15,7 +15,8 @@ class AbstractRepository(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    async def get_list(self, limit: int, offset: int):
+    async def get_list(self, limit: int, offset: int, order_by: str,
+                       reverse: bool, **filters):
         raise NotImplementedError
 
     @abstractmethod
@@ -49,12 +50,12 @@ class SQLAlchemyRepository(AbstractRepository, ABC):
         return result
 
     async def get_list(
-        self,
-        limit: int | None = None,
-        offset: int | None = None,
-        order_by: str | None = None,
-        reverse: bool = False,
-        **filters,
+            self,
+            limit: int | None = None,
+            offset: int | None = None,
+            order_by: str | None = None,
+            reverse: bool = False,
+            **filters,
     ) -> dict:
         total_count_stmt = select(func.count()).select_from(self.model)
         stmt = select(self.model)
