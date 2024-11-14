@@ -1,23 +1,24 @@
 import core.exceptions as _exc
 from core.security import get_password_hash, verify_password
 from models import User
-from services.jwt import JWTService
-from utils.time import get_utc
-from utils.unitofwork import IUnitOfWork
+from schemas.token import TokensResponse
 from schemas.user import (
     UserLoginResponse,
     UserLoginRequest,
     UserRegisterRequest,
-    UserResponse, UserChangePasswordRequest,
+    UserResponse,
+    UserChangePasswordRequest,
 )
-from schemas.token import TokensResponse
+from services.jwt import JWTService
+from utils.time import get_utc
+from utils.unitofwork import IUnitOfWork
 
 
 class UserService:
     @staticmethod
     async def _check_email(uow: IUnitOfWork, email: str) -> None:
         if (await uow.user.get(email=email)) is not None:
-            raise _exc.ConflictError(detail='User with this email already exists.')
+            raise _exc.ConflictError(detail="User with this email already exists.")
 
     @staticmethod
     async def get(uow: IUnitOfWork, **filters) -> User | None:

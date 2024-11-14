@@ -5,8 +5,8 @@ from fastapi.middleware import Middleware
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.sessions import SessionMiddleware
 
-from core.config import config
 from api.v1.routes import routers as v1_router
+from core.config import config
 
 
 async def on_startup():

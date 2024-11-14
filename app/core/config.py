@@ -1,6 +1,7 @@
 import os
-from datetime import timedelta
 from dataclasses import dataclass
+from datetime import timedelta
+
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -11,7 +12,7 @@ class Config:
     # base
     PROJECT_NAME: str = "API"
     PROJECT_ROOT: str = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-    APP_HOST: str = '0.0.0.0'
+    APP_HOST: str = "0.0.0.0"
     APP_PORT: int = 8000
 
     SECRET_KEY = os.getenv("SECRET")
@@ -22,8 +23,8 @@ class Config:
     DB_PORT = os.getenv("POSTGRES_PORT")
     DB_NAME = os.getenv("POSTGRES_DB")
 
-    # DATABASE_URI = f"postgresql+asyncpg://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
-    DATABASE_URI = f"sqlite+aiosqlite:///{PROJECT_ROOT}/db.db"
+    DATABASE_URI = f"postgresql+asyncpg://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
+    # DATABASE_URI = f"sqlite+aiosqlite:///{PROJECT_ROOT}/db.db"
     TEST_DATABASE_URI = f"sqlite+aiosqlite:///{PROJECT_ROOT}/test_db.db"
 
     # auth
@@ -43,8 +44,12 @@ class ProdConfig(Config):
 class DevConfig(Config):
     COOKIE_DOMAIN: str = "localhost"
     CORS_ORIGINS: tuple[str] = (
-        "http://127.0.0.1:8000", "http://localhost:8000", "http://127.0.0.1", "http://localhost",
-        "http://127.0.0.1:8080", "http://localhost:8080",
+        "http://127.0.0.1:8000",
+        "http://localhost:8000",
+        "http://127.0.0.1",
+        "http://localhost",
+        "http://127.0.0.1:8080",
+        "http://localhost:8080",
     )
     SHOW_DOCS: bool = True
 

@@ -1,8 +1,8 @@
-from typing import Any
 from abc import ABC, abstractmethod
+from typing import Any
 
-from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, update, delete, insert, func, or_, desc
+from sqlalchemy.ext.asyncio import AsyncSession
 
 
 class AbstractRepository(ABC):
@@ -15,8 +15,7 @@ class AbstractRepository(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    async def get_list(self, limit: int, offset: int, order_by: str,
-                       reverse: bool, **filters):
+    async def get_list(self, limit: int, offset: int, order_by: str, reverse: bool, **filters):
         raise NotImplementedError
 
     @abstractmethod
@@ -50,12 +49,12 @@ class SQLAlchemyRepository(AbstractRepository, ABC):
         return result
 
     async def get_list(
-            self,
-            limit: int | None = None,
-            offset: int | None = None,
-            order_by: str | None = None,
-            reverse: bool = False,
-            **filters,
+        self,
+        limit: int | None = None,
+        offset: int | None = None,
+        order_by: str | None = None,
+        reverse: bool = False,
+        **filters,
     ) -> dict:
         total_count_stmt = select(func.count()).select_from(self.model)
         stmt = select(self.model)
@@ -85,12 +84,7 @@ class SQLAlchemyRepository(AbstractRepository, ABC):
         result = await self.session.execute(stmt)
         result = result.scalars().all()
 
-        response = {
-            'total': total_count,
-            'limit': limit,
-            'offset': offset,
-            'data': result
-        }
+        response = {"total": total_count, "limit": limit, "offset": offset, "data": result}
         return response
 
     async def update(self, _id: int, values: dict):
