@@ -4,3 +4,5 @@ venv
 .gitignore
 docker-compose.yml
 Dockerfile
+.gitattributes
+.idea
