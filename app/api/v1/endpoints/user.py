@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Response
 
 from core.config import config
-from core.dependencies import UOW, current_user_or_error
+from core.dependencies import UOW, CurrentUserOrError
 from schemas.user import (
     UserLoginResponse,
     UserLoginRequest,
@@ -50,13 +50,13 @@ async def login_user(uow: UOW, response: Response, schema: UserLoginRequest):
 
 
 @router.get("/me", response_model=UserResponse)
-async def me(current_user: current_user_or_error):
+async def me(current_user: CurrentUserOrError):
     response_schema = UserResponse.model_validate(current_user, from_attributes=True)
     return response_schema
 
 
 @router.post("/change_password", response_model=UserResponse)
-async def change_user_password(uow: UOW, current_user: current_user_or_error, schema: UserChangePasswordRequest):
+async def change_user_password(uow: UOW, current_user: CurrentUserOrError, schema: UserChangePasswordRequest):
     user = await UserService().change_password(uow, current_user, schema)
     response_schema = UserResponse.model_validate(user, from_attributes=True)
     return response_schema

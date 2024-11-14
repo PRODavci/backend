@@ -34,4 +34,4 @@ async def get_current_user(uow: UOW, token: str = Depends(JWTBearer())) -> User:
     return user
 
 
-current_user_or_error = Annotated[User, Depends(get_current_user)]
+CurrentUserOrError = Annotated[User, Depends(get_current_user)]
