@@ -39,10 +39,7 @@ def make_middleware():
             allow_methods=["*"],
             allow_headers=["*"],
         ),
-        Middleware(
-            SessionMiddleware,
-            secret_key=config.SECRET_KEY
-        )
+        Middleware(SessionMiddleware, secret_key=config.SECRET_KEY),
     ]
     return middleware
 
