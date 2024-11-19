@@ -3,6 +3,9 @@ import os
 import click
 import uvicorn
 
+from core.config import get_config
+from core.logging import logger
+
 
 @click.command()
 @click.option(
@@ -16,17 +19,24 @@ import uvicorn
     is_flag=True,
     default=False,
 )
-def main(env: str = "dev", debug: bool = False):
+@click.option(
+    "--workers",
+    type=click.INT,
+    default=1,
+)
+def main(env: str = "dev", debug: bool = False, workers: int = 1):
     os.environ["ENV"] = env
     os.environ["DEBUG"] = str(debug)
 
-    from core.config import config
-
+    config = get_config()
+    logger.info("Application start")
+    logger.info(f"Config: {config.as_dict()}")
+    
     uvicorn.run(
         app="app:app",
         host=config.APP_HOST,
         port=config.APP_PORT,
-        reload=(env != "prod"),
+        workers=workers,
     )
 
 
