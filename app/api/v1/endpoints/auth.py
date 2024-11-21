@@ -12,10 +12,12 @@ router = APIRouter(
 
 
 @router.post("/refresh", response_model=TokensResponse)
-async def refresh_access(request: Request, response: Response, refresh_token: RefreshTokenRequest):
-    if refresh_token is None:
-        refresh_token = request.cookies.get("refresh_token", None)
-    
+async def refresh_access(request: Request, response: Response, schema: RefreshTokenRequest = None):
+    refresh_token = request.cookies.get("refresh_token", None)
+
+    if schema is not None and schema.refresh_token is not None:
+        refresh_token = schema.refresh_token
+        
     response_schema = JWTService().refresh(refresh_token)
 
     if not response_schema:
