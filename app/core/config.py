@@ -38,9 +38,9 @@ class Config:
 
 @dataclass(frozen=True)
 class ProdConfig(Config):
-    COOKIE_DOMAIN: str = ""
-    CORS_ORIGINS: tuple[str] = ("",)
-    SHOW_DOCS: bool = False
+    COOKIE_DOMAIN: str = "api.prodavci.tw1.ru"
+    CORS_ORIGINS: tuple[str] = ("http://api.prodavci.tw1.ru", "https://api.prodavci.tw1.ru")
+    SHOW_DOCS: bool = True
 
 
 @dataclass(frozen=True)
