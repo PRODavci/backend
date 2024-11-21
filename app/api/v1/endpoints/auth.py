@@ -2,7 +2,7 @@ from fastapi import APIRouter, Response, Request
 
 from core.config import config
 from core.exceptions import AuthError
-from schemas.token import TokensResponse
+from schemas.token import TokensResponse, RefreshTokenRequest
 from services.jwt import JWTService
 
 router = APIRouter(
@@ -12,9 +12,11 @@ router = APIRouter(
 
 
 @router.post("/refresh", response_model=TokensResponse)
-async def refresh_access(request: Request, response: Response):
-    token = request.cookies.get("refresh_token")
-    response_schema = JWTService().refresh(token)
+async def refresh_access(request: Request, response: Response, refresh_token: RefreshTokenRequest):
+    if refresh_token is None:
+        refresh_token = request.cookies.get("refresh_token", None)
+    
+    response_schema = JWTService().refresh(refresh_token)
 
     if not response_schema:
         raise AuthError("Invalid refresh token.")
