@@ -76,4 +76,4 @@ class UserService:
 
                 return user
 
-            return _exc.ForbiddenError(detail="Invalid current password")
+            raise _exc.ForbiddenError(detail="Invalid current password")
