@@ -6,6 +6,8 @@ from aio_pika.abc import AbstractIncomingMessage
 
 from core.config import config
 from services.scan import ScanService
+from services.push_notification import send_push_notification_async
+from services.push_token import PushTokenService
 from utils.unitofwork import UnitOfWork
 
 RABBIT_HOST = config.RABBITMQ_HOST
@@ -42,7 +44,7 @@ async def process_hosts_services(data: dict):
     host_ip = data['data'].get('host')
     services = data['data'].get('services', [])
 
-    if not scan_result_id or not host_ip or not services:
+    if not scan_result_id or not host_ip:
         print("Invalid data for host_service")
         return
 
@@ -65,8 +67,16 @@ async def process_scan_finished(data: dict):
 
     differences = await ScanService().compare_scan_results(uow, scan_result_id, network)
     print(f"Scan result {scan_result_id} finished. Differences with previous scan:")
-    for diff in differences:
-        print(diff)
+    if differences is not None:
+        for diff in differences:
+            print(diff)
+
+        differences = '\n'.join(differences)
+        results = (await PushTokenService().get_list(uow))['data']
+
+        for result in set(results):
+            print(result.token)
+            await send_push_notification_async('Сканирование завершено', differences, result.token)
 
 
 async def receive_message():

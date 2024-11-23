@@ -12,7 +12,7 @@ router = APIRouter(
 )
 
 
-@router.post("/start", response_model=ScanRequest,
+@router.post("/start",
              responses={
                  status.HTTP_200_OK: {
                      "model": ScanRequest
@@ -35,7 +35,7 @@ async def start_scan(uow: UOW, schema: ScanRequest, current_user: CurrentUserOrE
         'network': network,
     }
     await publisher.send_to_queue('network-scanner', data)
-    return schema
+    return {'id': scan_result.id}
 
 
 @router.get("", response_model=ScanResultListResponse,
@@ -52,7 +52,7 @@ async def start_scan(uow: UOW, schema: ScanRequest, current_user: CurrentUserOrE
                 }
             })
 async def get_scans_list(uow: UOW, current_user: CurrentUserOrError):
-    response = await ScanService().get_list(uow)
+    response = await ScanService().get_list(uow, reverse=True, order_by='id')
     return response
 
 

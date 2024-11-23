@@ -3,6 +3,7 @@ from fastapi import APIRouter, Response, status
 from core.config import config
 from core.dependencies import UOW, CurrentUserOrError
 from schemas.exceptions import ExceptionErrorResponse
+from schemas.push_token import PushTokenRequest
 from schemas.user import (
     UserLoginResponse,
     UserLoginRequest,
@@ -10,6 +11,7 @@ from schemas.user import (
     UserResponse,
     UserChangePasswordRequest,
 )
+from services.push_token import PushTokenService
 from services.user import UserService
 
 router = APIRouter(
@@ -117,3 +119,20 @@ async def change_user_password(uow: UOW, current_user: CurrentUserOrError, schem
     user = await UserService().change_password(uow, current_user, schema)
     response_schema = UserResponse.model_validate(user, from_attributes=True)
     return response_schema
+
+@router.post(
+    "/push_token",
+    responses={
+        status.HTTP_200_OK: {
+            "model": UserResponse,
+            "description": "Ok Response",
+        },
+        status.HTTP_401_UNAUTHORIZED: {
+            "model": ExceptionErrorResponse,
+            "description": "Invalid auth token",
+        },
+    },
+)
+async def add_token(uow:UOW,  current_user: CurrentUserOrError, schema: PushTokenRequest):
+    await PushTokenService().create(uow, current_user.id, schema.token)
+    return {'status': 'ok'}

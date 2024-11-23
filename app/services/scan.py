@@ -1,5 +1,3 @@
-from cgitb import reset
-
 from sqlalchemy import select, and_
 
 from core.exceptions import NotFoundError
@@ -103,7 +101,7 @@ class ScanService:
             await uow.commit()
 
     @staticmethod
-    async def compare_scan_results(uow: IUnitOfWork, current_scan_result_id: int, network: str) -> list[str]:
+    async def compare_scan_results(uow: IUnitOfWork, current_scan_result_id: int, network: str) -> list[str] | None:
         """
         Сравнивает текущий результат сканирования с предыдущим.
         Возвращает список изменений.
@@ -111,7 +109,7 @@ class ScanService:
         async with uow:
             last_scan_result = await ScanService._get_last_scan_result(uow, current_scan_result_id, network)
             if not last_scan_result:
-                return ["No previous scan result to compare."]
+                return None
 
             current_hosts = {
                 host.ip: host for host in (await uow.host.get_list(scan_result_id=current_scan_result_id))['data']
@@ -124,25 +122,25 @@ class ScanService:
 
             for ip, current_host in current_hosts.items():
                 if ip not in previous_hosts:
-                    differences.append(f"New host detected: {ip}")
+                    differences.append(f"Найден новый хост: {ip}")
                 else:
                     current_services = {f"{s.port}/{s.protocol}": s for s in current_host.services}
                     previous_services = {f"{s.port}/{s.protocol}": s for s in previous_hosts[ip].services}
 
                     for key, current_service in current_services.items():
                         if key not in previous_services:
-                            differences.append(f"New service on host {ip}: {key}")
+                            differences.append(f"Найден новый сервис {ip}: {key}")
                         else:
                             previous_service = previous_services[key]
                             for param in ['name', 'product', 'version', 'ostype', 'conf']:
                                 if getattr(current_service, param) != getattr(previous_service, param):
                                     differences.append(
-                                        f"Service {key} on host {ip} changed {param}: "
+                                        f"Сервис {key} на хосте {ip} изменил {param}: "
                                         f"{getattr(previous_service, param)} -> {getattr(current_service, param)}"
                                     )
 
             for ip in previous_hosts.keys():
                 if ip not in current_hosts:
-                    differences.append(f"Host disappeared: {ip}")
+                    differences.append(f"Хост больше не доступен: {ip}")
 
             return differences
