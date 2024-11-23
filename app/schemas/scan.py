@@ -6,7 +6,7 @@ from schemas.host import HostResponse, HostWithoutServicesResponse
 
 
 class ScanRequest(BaseModel):
-    network: str
+    network: list[str]
 
 class ScanResultResponse(BaseModel):
     id: int

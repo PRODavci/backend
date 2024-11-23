@@ -26,11 +26,13 @@ router = APIRouter(
                  }
              })
 async def start_scan(uow: UOW, schema: ScanRequest, current_user: CurrentUserOrError):
-    scan_result = await ScanService().create(uow, schema.network)
+    network = list(sorted(schema.network))
+    network = ','.join(network)
+    scan_result = await ScanService().create(uow, network)
     data = {
         'type': 'start_scan',
         'scan_result_id': scan_result.id,
-        'network': schema.network,
+        'network': network,
     }
     await publisher.send_to_queue('network-scanner', data)
     return schema
