@@ -3,12 +3,18 @@ from abc import ABC, abstractmethod
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from core.database import async_session_maker
+from repositories.host import HostRepository
+from repositories.scan_result import ScanResultRepository
+from repositories.service import ServiceRepository
 from repositories.user import UserRepository
 
 
 class IUnitOfWork(ABC):
     session: AsyncSession
     user: UserRepository
+    host: HostRepository
+    scan_result: ScanResultRepository
+    service: ServiceRepository
 
     @abstractmethod
     def __init__(self):
@@ -38,6 +44,9 @@ class UnitOfWork(IUnitOfWork):
     async def __aenter__(self):
         self.session = self.session_factory()
         self.user = UserRepository(self.session)
+        self.host = HostRepository(self.session)
+        self.service = ServiceRepository(self.session)
+        self.scan_result = ScanResultRepository(self.session)
 
     async def __aexit__(self, *args):
         await self.rollback()
