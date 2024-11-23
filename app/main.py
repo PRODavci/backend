@@ -1,8 +1,10 @@
+import multiprocessing
 import os
 
 import click
 import uvicorn
 
+from consumer import start_consumer
 from core.config import get_config
 from core.logging import logger
 
@@ -31,7 +33,7 @@ def main(env: str = "dev", debug: bool = False, workers: int = 1):
     config = get_config()
     logger.info("Application start")
     logger.info(f"Config: {config.as_dict()}")
-    
+
     uvicorn.run(
         app="app:app",
         host=config.APP_HOST,
@@ -41,4 +43,7 @@ def main(env: str = "dev", debug: bool = False, workers: int = 1):
 
 
 if __name__ == "__main__":
+    process = multiprocessing.Process(target=start_consumer)
+    process.start()
     main()
+    process.join()

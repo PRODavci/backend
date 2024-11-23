@@ -1,3 +1,5 @@
+aio-pika==9.5.0
+aiormq==6.8.1
 aiosqlite==0.20.0
 alembic==1.13.1
 annotated-types==0.7.0
@@ -35,12 +37,15 @@ markdown-it-py==3.0.0
 MarkupSafe==2.1.5
 mccabe==0.7.0
 mdurl==0.1.2
+multidict==6.1.0
 mypy-extensions==1.0.0
 orjson==3.10.3
 packaging==24.2
+pamqp==3.3.0
 pathspec==0.12.1
 platformdirs==4.3.6
 pluggy==1.5.0
+propcache==0.2.0
 pyasn1==0.6.0
 pycparser==2.22
 pydantic==2.7.3
@@ -72,3 +77,4 @@ ujson==5.10.0
 uvicorn==0.30.1
 watchfiles==0.22.0
 websockets==12.0
+yarl==1.18.0

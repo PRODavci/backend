@@ -32,6 +32,12 @@ class Config:
     JWT_ACCESS_EXPIRE: timedelta = timedelta(minutes=60)
     JWT_REFRESH_EXPIRE: timedelta = timedelta(days=180)
 
+    # rabbitmq
+    RABBITMQ_USER = os.getenv("RABBITMQ_DEFAULT_USER")
+    RABBITMQ_PASSWORD = os.getenv("RABBITMQ_DEFAULT_PASS")
+    RABBITMQ_HOST = os.getenv("RABBITMQ_HOST")
+    RABBITMQ_PORT = os.getenv("RABBITMQ_PORT")
+
     def as_dict(self):
         return asdict(self)
 
