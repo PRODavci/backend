@@ -13,4 +13,4 @@ class ServiceResponse(BaseModel):
     version: str | None = None
     ostype: str | None = None
     conf: str | None = None
-    cve: list[CVEBase]
+    cve: list[CVEBase] | None = None
