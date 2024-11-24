@@ -109,7 +109,7 @@ class ScanService:
                                     'service_id': service.id,
                                     'cve_id': cve['cve_id'],
                                     'base_score':cve['metrics']['base_score'],
-                                    'description':cve['meta']['base_score'],
+                                    'description':cve['meta']['description'],
                                     'references': cve['references'],
                                 })
 
