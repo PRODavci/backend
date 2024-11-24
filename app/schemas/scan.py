@@ -2,6 +2,7 @@ from datetime import datetime
 
 from pydantic import BaseModel
 
+from schemas.cve import CVEBase
 from schemas.host import HostResponse, HostWithoutServicesResponse
 
 
@@ -14,6 +15,8 @@ class ScanResultResponse(BaseModel):
     timestamp: datetime
     status: str
     hosts: list[HostResponse]
+    cve: list[CVEBase]
+
 
     class Config:
         json_encoders = {
