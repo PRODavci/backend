@@ -100,7 +100,7 @@ class ScanService:
                     print(service_data)
 
                     if service_data['product'] is not None and service_data['version'] is not None:
-                        cve_list = fetch_cve(service_data['product'], service_data['version'])
+                        cve_list = await fetch_cve(service_data['product'], service_data['version'])
                         if cve_list:
                             print(cve_list)
                             for cve in cve_list:

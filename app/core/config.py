@@ -47,8 +47,8 @@ class Config:
 
 @dataclass(frozen=True)
 class ProdConfig(Config):
-    COOKIE_DOMAIN: str = "api.prodavci.tw1.ru"
-    CORS_ORIGINS: tuple[str] = ("http://api.prodavci.tw1.ru", "https://api.prodavci.tw1.ru")
+    COOKIE_DOMAIN: str = "407d-46-138-75-161.ngrok-free.app"
+    CORS_ORIGINS: tuple[str] = ("http://407d-46-138-75-161.ngrok-free.app", "https://407d-46-138-75-161.ngrok-free.app")
     SHOW_DOCS: bool = True
 
 
