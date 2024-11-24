@@ -49,8 +49,9 @@ def create_app() -> FastAPI:
         title="API",
         description="API",
         version="1.0.0",
-        docs_url=None if not config.SHOW_DOCS else "/docs",
-        redoc_url=None if not config.SHOW_DOCS else "/redoc",
+        docs_url=None if not config.SHOW_DOCS else "/api/docs",
+        redoc_url=None if not config.SHOW_DOCS else "/api/redoc",
+        openapi_url="/api/openapi.json",
         middleware=make_middleware(),
         lifespan=lifespan,
     )

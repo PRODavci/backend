@@ -15,7 +15,7 @@ router = APIRouter(
 @router.post("/start",
              responses={
                  status.HTTP_200_OK: {
-                     "model": ScanRequest
+                     "description": "Start scanning"
                  },
                  status.HTTP_401_UNAUTHORIZED: {
                      "model": ExceptionErrorResponse,

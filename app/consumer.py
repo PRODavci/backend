@@ -66,6 +66,7 @@ async def process_scan_finished(data: dict):
         return
 
     differences = await ScanService().compare_scan_results(uow, scan_result_id, network)
+    await ScanService().update_status(uow, scan_result_id, 'finished')
     print(f"Scan result {scan_result_id} finished. Differences with previous scan:")
     if differences is not None:
         for diff in differences:

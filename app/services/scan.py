@@ -144,3 +144,15 @@ class ScanService:
                     differences.append(f"Хост больше не доступен: {ip}")
 
             return differences
+
+    @staticmethod
+    async def update_status(uow: IUnitOfWork, scan_result_id: int, status: str):
+        async with uow:
+            scan_result = await uow.scan_result.get(id=scan_result_id)
+            if not scan_result:
+                return None
+
+            scan_result.status = status
+            uow.session.add(scan_result)
+
+            await uow.commit()

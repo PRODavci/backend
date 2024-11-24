@@ -17,6 +17,7 @@ class ScanResult(Base):
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     network: Mapped[str] = mapped_column(String(1000))
     timestamp: Mapped[datetime] = mapped_column(TIMESTAMP(timezone=True), nullable=False, default=get_utc)
+    status: Mapped[str] = mapped_column(String(50), default="running")
     hosts: Mapped[list["Host"]] = relationship(
         "Host", back_populates="scan_result", cascade="all, delete-orphan", lazy="selectin"
     )

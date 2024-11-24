@@ -124,7 +124,6 @@ async def change_user_password(uow: UOW, current_user: CurrentUserOrError, schem
     "/push_token",
     responses={
         status.HTTP_200_OK: {
-            "model": UserResponse,
             "description": "Ok Response",
         },
         status.HTTP_401_UNAUTHORIZED: {

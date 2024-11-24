@@ -12,6 +12,7 @@ class ScanResultResponse(BaseModel):
     id: int
     network: str
     timestamp: datetime
+    status: str
     hosts: list[HostResponse]
 
     class Config:
@@ -23,6 +24,7 @@ class ScanResultWithoutServicesResponse(BaseModel):
     id: int
     network: str
     timestamp: datetime
+    status: str
     hosts: list[HostWithoutServicesResponse]
 
     class Config:
