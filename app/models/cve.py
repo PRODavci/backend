@@ -1,8 +1,8 @@
 from sqlalchemy import Integer, String, ForeignKey, Float, JSON
 from sqlalchemy.orm import relationship, Mapped, mapped_column
-from sqlalchemy.ext.declarative import declarative_base
 
-Base = declarative_base()
+from core.database import Base
+
 
 class CVE(Base):
     __tablename__ = "cves"

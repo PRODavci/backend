@@ -13,5 +13,5 @@ __all__ = [
     "User",
     "ScanResult",
     "PushToken",
-    "CVE"
+    "CVE",
 ]
