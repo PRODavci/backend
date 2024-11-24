@@ -15,8 +15,6 @@ class ScanResultResponse(BaseModel):
     timestamp: datetime
     status: str
     hosts: list[HostResponse]
-    cve: list[CVEBase]
-
 
     class Config:
         json_encoders = {
