@@ -47,8 +47,8 @@ class Config:
 
 @dataclass(frozen=True)
 class ProdConfig(Config):
-    COOKIE_DOMAIN: str = "407d-46-138-75-161.ngrok-free.app"
-    CORS_ORIGINS: tuple[str] = ("http://407d-46-138-75-161.ngrok-free.app", "https://407d-46-138-75-161.ngrok-free.app")
+    COOKIE_DOMAIN: str = "https://next-rabbit-legal.ngrok-free.app"
+    CORS_ORIGINS: tuple[str] = ("http://next-rabbit-legal.ngrok-free.app", "https://next-rabbit-legal.ngrok-free.app")
     SHOW_DOCS: bool = True
 
 
