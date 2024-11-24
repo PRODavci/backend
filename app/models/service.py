@@ -23,3 +23,5 @@ class Service(Base):
     conf: Mapped[str | None] = mapped_column(String, nullable=True)
 
     host: Mapped["Host"] = relationship(back_populates="services")
+    cves: Mapped[list["CVE"]] = relationship("CVE", back_populates="service", cascade="all, delete-orphan",
+                                             lazy="selectin")

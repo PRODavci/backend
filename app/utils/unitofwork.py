@@ -3,6 +3,7 @@ from abc import ABC, abstractmethod
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from core.database import async_session_maker
+from repositories.cve import CVERepository
 from repositories.host import HostRepository
 from repositories.scan_result import ScanResultRepository
 from repositories.service import ServiceRepository
@@ -17,6 +18,7 @@ class IUnitOfWork(ABC):
     scan_result: ScanResultRepository
     service: ServiceRepository
     push_token: PushTokenRepository
+    cve: CVERepository
 
     @abstractmethod
     def __init__(self):
@@ -50,6 +52,7 @@ class UnitOfWork(IUnitOfWork):
         self.service = ServiceRepository(self.session)
         self.scan_result = ScanResultRepository(self.session)
         self.push_token = PushTokenRepository(self.session)
+        self.cve = CVERepository(self.session)
 
     async def __aexit__(self, *args):
         await self.rollback()

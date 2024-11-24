@@ -38,6 +38,9 @@ class Config:
     RABBITMQ_HOST = os.getenv("RABBITMQ_HOST")
     RABBITMQ_PORT = os.getenv("RABBITMQ_PORT")
 
+    CVE_SERVICE_URL = os.getenv("CVE_SERVICE_URL")
+    CVE_SERVICE_PORT = os.getenv("CVE_SERVICE_PORT")
+
     def as_dict(self):
         return asdict(self)
 

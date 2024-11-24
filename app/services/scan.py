@@ -1,5 +1,7 @@
+import aiohttp
 from sqlalchemy import select, and_
 
+from core.config import config
 from core.exceptions import NotFoundError
 from models import ScanResult
 from schemas.scan import ScanResultResponse, ScanResultListResponse
@@ -82,7 +84,7 @@ class ScanService:
                     protocol=service_data['protocol']
                 )
                 if not service:
-                    await uow.service.create({
+                    service = await uow.service.create({
                         'host_id': host.id,
                         'port': int(service_data['port']),
                         'protocol': service_data['protocol'],
@@ -92,6 +94,24 @@ class ScanService:
                         'ostype': service_data['ostype'],
                         'conf': service_data['conf'],
                     })
+
+                    await uow.commit()
+
+                    if service_data['product'] is not None and service_data['version'] is not None:
+                        cve_list = fetch_cve(service_data['product'], service_data['version'])
+                        if cve_list:
+                            print(cve_list)
+                            for cve in cve_list:
+
+                                await uow.cve.create({
+                                    'service_id': service.id,
+                                    'cve_id': cve['cve_id'],
+                                    'base_score':cve['metrics']['base_score'],
+                                    'description':cve['meta']['base_score'],
+                                    'references': cve['references'],
+                                })
+
+                            await uow.commit()
                 else:
                     for key in ['name', 'product', 'version', 'ostype', 'conf']:
                         if getattr(service, key) != service_data.get(key):
@@ -156,3 +176,20 @@ class ScanService:
             uow.session.add(scan_result)
 
             await uow.commit()
+
+
+async def fetch_cve(product: str, version: str) -> list:
+    base_url = f"http://{config.CVE_SERVICE_URL}:{config.CVE_SERVICE_PORT}/search"
+    params = {
+        "product": product,
+        "version": version,
+    }
+
+    async with aiohttp.ClientSession() as session:
+        try:
+            async with session.get(base_url, params=params) as response:
+                response.raise_for_status()
+                return await response.json()
+        except aiohttp.ClientError as e:
+            print(f"Ошибка при запросе к CVE-сервису: {e}")
+            return None
